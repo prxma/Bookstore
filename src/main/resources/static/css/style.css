@@ -1,0 +1,134 @@
+/* Общие стили для books.html и book.html */
+
+:root {
+  --ink: #1d2433;
+  --muted: #5f6b7a;
+  --page: #f2f4f1;
+  --surface: #ffffff;
+  --line: #d8ddd6;
+  --accent: #0f7b6c;
+  --accent-ink: #ffffff;
+  --sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e7ebf0;
+    --muted: #9aa5b4;
+    --page: #12161c;
+    --surface: #1a2029;
+    --line: #2c3541;
+    --accent: #3bb8a5;
+    --accent-ink: #0c1512;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 16px/1.55 var(--sans);
+}
+
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Шапка и контейнер ---------- */
+
+.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+.top .in { max-width: 1080px; margin: 0 auto; padding: 14px 20px; }
+.brand { font-weight: 700; font-size: 18px; text-decoration: none; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 56px; }
+
+h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 18px; }
+
+.muted { color: var(--muted); }
+
+/* ---------- Поиск ---------- */
+
+.search { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 24px; }
+.search input {
+  flex: 1 1 260px; max-width: 420px;
+  font: inherit; color: var(--ink); background: var(--surface);
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px;
+}
+.btn, .search button {
+  font: inherit; font-weight: 600; cursor: pointer;
+  padding: 10px 16px; border: 0; border-radius: 6px;
+  background: var(--accent); color: var(--accent-ink);
+}
+.reset { color: var(--muted); }
+.empty { padding: 32px 0; color: var(--muted); }
+
+/* ---------- Обложка (рисуется сама, цвет зависит от --h) ---------- */
+
+.cover {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: space-between;
+  aspect-ratio: 2 / 3;
+  padding: 16px 14px 16px 24px;
+  border-radius: 3px 8px 8px 3px;
+  color: #fff; text-decoration: none;
+  background: linear-gradient(160deg, hsl(var(--h) 48% 40%), hsl(calc(var(--h) + 35) 52% 24%));
+}
+.cover::before {            /* «корешок» слева */
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 10px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, .35), rgba(0, 0, 0, .05));
+}
+.cover .ca { font-size: 12px; line-height: 1.3; opacity: .85; }
+.cover .ct { font-family: var(--serif); font-weight: 700; font-size: 20px; line-height: 1.15; overflow-wrap: anywhere; }
+
+/* ---------- Каталог: «полка» ---------- */
+
+.shelf {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 32px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+}
+.item .meta { margin-top: 10px; }
+.item h2 { font-size: 16px; line-height: 1.3; margin: 0 0 2px; }
+.item h2 a { text-decoration: none; }
+.item h2 a:hover { text-decoration: underline; }
+.author { margin: 0; font-size: 14px; color: var(--muted); }
+.price { margin: 6px 0 0; font-weight: 700; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 8px 0 0; padding: 0; }
+.tag {
+  font-size: 13px; color: var(--muted);
+  padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+}
+
+/* ---------- Страница одной книги ---------- */
+
+.back { display: inline-block; margin: 0 0 18px; color: var(--muted); }
+
+.detail { display: grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: 40px; align-items: start; }
+.detail .cover { position: sticky; top: 20px; }
+.detail .cover .ct { font-size: 28px; }
+.detail .cover .ca { font-size: 14px; }
+
+.byline { margin: 0 0 14px; font-size: 20px; color: var(--muted); }
+
+.buy { display: flex; align-items: center; gap: 16px; margin: 20px 0 28px; }
+.buy .price { margin: 0; font-size: 28px; }
+
+.facts { display: grid; grid-template-columns: max-content 1fr; column-gap: 24px; margin: 0 0 32px; border-top: 1px solid var(--line); }
+.facts dt, .facts dd { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.facts dt { color: var(--muted); }
+.facts .tags { margin: 0; }
+
+.about { max-width: 62ch; }
+.about h2, .similar > h2 { font-size: 20px; margin: 0 0 8px; }
+.about p { margin: 0; white-space: pre-line; }
+
+.similar { margin-top: 56px; }
+.similar > h2 { margin-bottom: 18px; }
+
+@media (max-width: 720px) {
+  .detail { grid-template-columns: 1fr; gap: 24px; }
+  .detail .cover { position: static; max-width: 240px; }
+}
