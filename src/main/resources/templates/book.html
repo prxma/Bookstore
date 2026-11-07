@@ -8,24 +8,7 @@
 </head>
 <body>
 
-<header class="top">
-    <div class="in">
-        <a class="brand" th:href="@{/books}">Bookstore</a>
-        <div class="who">
-            <th:block th:if="${currentEmail != null}">
-                <span th:text="${currentEmail}">user@mail</span>
-                <form class="inline" th:action="@{/logout}" method="post">
-                    <button type="submit" class="link">Выйти</button>
-                </form>
-            </th:block>
-            <!-- Гость -->
-            <th:block th:if="${currentEmail == null}">
-                <a th:href="@{/login}">Войти</a>
-                <a th:href="@{/register}">Регистрация</a>
-            </th:block>
-        </div>
-    </div>
-</header>
+<header th:replace="~{fragments :: header}"></header>
 
 <main class="wrap">
     <a class="back" th:href="@{/books}">Все книги</a>

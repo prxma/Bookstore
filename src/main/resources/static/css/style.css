@@ -151,3 +151,29 @@ h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -0.01
 .hint { margin: 0; font-size: 14px; color: var(--muted); }
 .form-ok { max-width: 360px; margin: 0 0 14px; padding: 10px 12px; border-left: 4px solid var(--accent); background: var(--surface); }
 @media (prefers-color-scheme: dark) { .field-error { color: #ff8a80; } }
+/* ---------- Админка ---------- */
+
+.adminnav { background: var(--surface); border-bottom: 1px solid var(--line); }
+.adminnav .in { max-width: 1080px; margin: 0 auto; padding: 0 20px; display: flex; gap: 20px; }
+.adminnav a { padding: 12px 0; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; }
+.adminnav a.on { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+
+.stats { list-style: none; margin: 0 0 32px; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.stats li { display: flex; flex-direction: column; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.stats .num { font-size: 34px; font-weight: 700; line-height: 1.1; }
+.stats .lbl { color: var(--muted); }
+
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; background: var(--surface); }
+.table th, .table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.table th { color: var(--muted); font-weight: 600; font-size: 14px; }
+
+.badge { display: inline-block; margin-right: 4px; padding: 1px 8px; font-size: 12px; border: 1px solid var(--line); border-radius: 999px; }
+.badge.admin { border-color: var(--accent); color: var(--accent); }
+
+.btn-small { font: inherit; font-size: 14px; padding: 5px 10px; color: var(--ink); background: var(--page); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+.btn-small:hover { border-color: var(--accent); }
+
+.pager { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+.flash { max-width: 520px; margin: 0 0 16px; padding: 10px 12px; background: var(--surface); border-left: 4px solid var(--accent); }
+.flash.err { border-left-color: #c0392b; }

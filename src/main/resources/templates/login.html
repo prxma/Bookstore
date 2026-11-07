@@ -8,9 +8,7 @@
 </head>
 <body>
 
-<header class="top">
-    <div class="in"><a class="brand" th:href="@{/books}">Bookstore</a></div>
-</header>
+<header th:replace="~{fragments :: header}"></header>
 
 <main class="wrap">
     <h1>Вход</h1>

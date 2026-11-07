@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Админ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments :: header}"></header>
+<nav th:replace="~{fragments :: adminNav('dashboard')}"></nav>
+
+<main class="wrap">
+    <h1>Панель администратора</h1>
+
+    <ul class="stats">
+        <li><span class="num" th:text="${stats.users}">0</span><span class="lbl">Пользователей</span></li>
+        <li><span class="num" th:text="${stats.usersPerWeek}">0</span><span class="lbl">Новых за 7 дней</span></li>
+        <li><span class="num" th:text="${stats.admins}">0</span><span class="lbl">Администраторов</span></li>
+        <li><span class="num" th:text="${stats.books}">0</span><span class="lbl">Книг в каталоге</span></li>
+    </ul>
+
+    <h2>Последние регистрации</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Имя</th><th>Email</th><th>Зарегистрирован</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="u : ${latest}">
+                <td th:text="${u.name + ' ' + u.surname}">Имя Фамилия</td>
+                <td th:text="${u.email}">mail@example.com</td>
+                <td th:text="${#temporals.format(u.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2026 12:00</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p><a th:href="@{/admin/users}">Все пользователи</a></p>
+</main>
+
+</body>
+</html>
