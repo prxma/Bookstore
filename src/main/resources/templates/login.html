@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вход — Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="top">
+    <div class="in"><a class="brand" th:href="@{/books}">Bookstore</a></div>
+</header>
+
+<main class="wrap">
+    <h1>Вход</h1>
+    <p class="form-ok" th:if="${param.registered}">Регистрация прошла успешно. Теперь войдите.</p>
+
+    <!-- Spring Security сам перенаправляет на /login?error при неверных данных -->
+    <p class="form-error" th:if="${param.error}">Неверный email или пароль.</p>
+
+    <!-- th:action сам добавляет скрытое поле с CSRF-токеном.
+         Поля обязаны называться username и password. -->
+    <form class="auth" th:action="@{/login}" method="post">
+        <label for="username">Email</label>
+        <input id="username" type="email" name="username" autocomplete="username" required autofocus>
+
+        <label for="password">Пароль</label>
+        <input id="password" type="password" name="password" autocomplete="current-password" required>
+
+        <button type="submit" class="btn">Войти</button>
+    </form>
+    <p class="muted">Нет аккаунта? <a th:href="@{/register}">Зарегистрироваться</a></p>
+</main>
+
+</body>
+</html>

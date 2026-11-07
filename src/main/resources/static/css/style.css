@@ -39,7 +39,7 @@ a { color: inherit; }
 /* ---------- Шапка и контейнер ---------- */
 
 .top { background: var(--surface); border-bottom: 1px solid var(--line); }
-.top .in { max-width: 1080px; margin: 0 auto; padding: 14px 20px; }
+.top .in { max-width: 1080px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand { font-weight: 700; font-size: 18px; text-decoration: none; }
 
 .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 56px; }
@@ -132,3 +132,22 @@ h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -0.01
   .detail { grid-template-columns: 1fr; gap: 24px; }
   .detail .cover { position: static; max-width: 240px; }
 }
+/* ---------- Вход и регистрация ---------- */
+
+.who { display: flex; align-items: center; gap: 14px; font-size: 15px; }
+.who a { color: var(--muted); }
+.inline { display: inline; margin: 0; }
+.link { font: inherit; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+
+.auth { display: grid; gap: 6px; max-width: 360px; }
+.auth label { margin-top: 10px; font-weight: 600; }
+.auth input {
+  font: inherit; color: var(--ink); background: var(--surface);
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px;
+}
+.auth .btn { margin-top: 18px; justify-self: start; }
+.form-error { max-width: 360px; margin: 0 0 14px; padding: 10px 12px; border-left: 4px solid #c0392b; background: var(--surface); }
+.field-error { margin: 0; font-size: 14px; color: #b3261e; }
+.hint { margin: 0; font-size: 14px; color: var(--muted); }
+.form-ok { max-width: 360px; margin: 0 0 14px; padding: 10px 12px; border-left: 4px solid var(--accent); background: var(--surface); }
+@media (prefers-color-scheme: dark) { .field-error { color: #ff8a80; } }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Регистрация</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="top">
+    <div class="in">
+        <a class="brand" th:href="@{/books}">Bookstore</a>
+        <div class="who"><a th:href="@{/login}">Войти</a></div>
+    </div>
+</header>
+
+<main class="wrap">
+    <h1>Регистрация</h1>
+
+    <form class="auth" th:action="@{/register}" th:object="${form}" method="post" novalidate>
+
+        <label for="name">Имя</label>
+        <input type="text" th:field="*{name}" autocomplete="given-name">
+        <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Ошибка</p>
+
+        <label for="surname">Фамилия</label>
+        <input type="text" th:field="*{surname}" autocomplete="family-name">
+        <p class="field-error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Ошибка</p>
+
+        <label for="email">Email</label>
+        <input type="email" th:field="*{email}" autocomplete="email">
+        <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Ошибка</p>
+
+        <label for="password">Пароль</label>
+        <input type="password" th:field="*{password}" autocomplete="new-password">
+        <p class="hint">Не меньше 8 символов</p>
+        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Ошибка</p>
+
+        <label for="confirmPassword">Повторите пароль</label>
+        <input type="password" th:field="*{confirmPassword}" autocomplete="new-password">
+        <p class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Ошибка</p>
+
+        <button type="submit" class="btn">Зарегистрироваться</button>
+    </form>
+
+    <p class="muted">Уже есть аккаунт? <a th:href="@{/login}">Войти</a></p>
+</main>
+
+</body>
+</html>
