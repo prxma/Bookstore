@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Каталог книг</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/catalog.js}" defer></script>
 </head>
 <body>
 
@@ -13,7 +14,9 @@
 <main class="wrap">
     <h1>Каталог книг</h1>
 
-    <!-- Поиск: отправляет GET /books?q=слово. Работает, когда контроллер принимает параметр q -->
+    <p class="flash" th:if="${message}" th:text="${message}">Готово</p>
+    <p class="flash err" th:if="${error}" th:text="${error}">Ошибка</p>
+
     <form class="search" th:action="@{/books}" method="get">
         <input type="search" name="q" th:value="${q}" placeholder="Название или автор" aria-label="Поиск по названию или автору">
         <button type="submit">Найти</button>
@@ -24,38 +27,68 @@
         По запросу «<span th:text="${q}">слово</span>» найдено: <span th:text="${#lists.size(books)}">0</span>
     </p>
 
-    <!-- Если список пуст -->
     <p class="empty" th:if="${#lists.isEmpty(books)}">
         Ничего не найдено. Попробуйте другое слово или сбросьте поиск.
     </p>
 
-    <!-- Одна книга = один <li>. th:each повторяет его для каждой книги из списка books -->
-    <ul class="shelf" th:unless="${#lists.isEmpty(books)}">
-        <li class="item" th:each="b : ${books}">
+    <form id="orderForm" th:action="@{/purchases/buy-many}" method="post" th:unless="${#lists.isEmpty(books)}">
+        <ul class="shelf">
+            <li class="item" th:each="b, st : ${books}" th:style="'--i:' + ${st.index}">
 
-            <!-- Обложка. Число --h (оттенок) считается из id, поэтому у каждой книги свой цвет -->
-            <a class="cover" th:href="@{/books/{id}(id=${b.id})}"
-               th:style="'--h:' + ${(b.id * 47) % 360}" tabindex="-1" aria-hidden="true">
-                <span class="ca" th:text="${b.author}">Автор</span>
-                <span class="ct" th:text="${b.title}">Название</span>
-            </a>
+                <a class="cover" th:href="@{/books/{id}(id=${b.id})}"
+                   th:style="'--h:' + ${(b.id * 47) % 360}" tabindex="-1" aria-hidden="true">
+                    <span class="ca" th:text="${b.author}">Автор</span>
+                    <span class="ct" th:text="${b.title}">Название</span>
+                </a>
 
-            <div class="meta">
-                <h2><a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">Название</a></h2>
-                <p class="author">
-                    <span th:text="${b.author}">Автор</span><span th:if="${b.year_of_publishing != null}">, <span th:text="${b.year_of_publishing}">1949</span></span>
-                </p>
+                <div class="meta">
+                    <h2><a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">Название</a></h2>
+                    <p class="author">
+                        <span th:text="${b.author}">Автор</span><span th:if="${b.year_of_publishing != null}">, <span th:text="${b.year_of_publishing}">1949</span></span>
+                    </p>
 
-                <!-- Жанры книги -->
-                <ul class="tags" th:if="${b.genres != null and !b.genres.isEmpty()}">
-                    <li class="tag" th:each="g : ${b.genres}" th:text="${g.name}">Жанр</li>
-                </ul>
+                    <ul class="tags" th:if="${b.genres != null and !b.genres.isEmpty()}">
+                        <li class="tag" th:each="g : ${b.genres}" th:text="${g.name}">Жанр</li>
+                    </ul>
 
-                <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 2)}">0.00</span> BYN</p>
-            </div>
-        </li>
-    </ul>
+                    <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 2)}">0.00</span> BYN</p>
+                </div>
+
+                <label class="pick" th:if="${currentEmail != null}">
+                    <input type="checkbox" name="bookIds" th:value="${b.id}">
+                    <span class="pick-btn">
+                        <span class="off">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            В заказ
+                        </span>
+                        <span class="on">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12.5l4.5 4.5L19 7.5"/>
+                            </svg>
+                            В заказе
+                        </span>
+                    </span>
+                </label>
+            </li>
+        </ul>
+    </form>
 </main>
+
+<button type="submit" form="orderForm" class="cart" id="cartBtn"
+        th:if="${currentEmail != null and !#lists.isEmpty(books)}"
+        title="Купить выбранные" aria-label="Купить выбранные книги">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="9" cy="20" r="1.4"/>
+        <circle cx="17.5" cy="20" r="1.4"/>
+        <path d="M2.5 4h2.3l2.2 10.2a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.78L19.3 7.5H5.6"/>
+    </svg>
+    <span class="cart-count" id="cartCount" aria-live="polite" hidden>0</span>
+</button>
 
 </body>
 </html>

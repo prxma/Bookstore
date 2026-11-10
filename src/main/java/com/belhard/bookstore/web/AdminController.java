@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.belhard.bookstore.service.StatsService;
 
 import java.security.Principal;
 
@@ -15,6 +16,7 @@ import java.security.Principal;
 public class AdminController {
 
     private final AdminService adminService;
+    private final StatsService statsService;
 
     @GetMapping
     public String dashboard(Model model) {
@@ -54,5 +56,17 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/admin/users?page=" + page;
+    }
+
+    @GetMapping("/purchases")
+    public String purchases(@RequestParam(defaultValue = "0") int page, Model model) {
+        model.addAttribute("purchasesPage", statsService.purchasesPage(page));
+        return "admin/purchases";
+    }
+
+    @GetMapping("/stats")
+    public String stats(Model model) {
+        model.addAttribute("r", statsService.report());
+        return "admin/stats";
     }
 }

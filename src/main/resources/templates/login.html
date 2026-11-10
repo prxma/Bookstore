@@ -14,11 +14,8 @@
     <h1>Вход</h1>
     <p class="form-ok" th:if="${param.registered}">Регистрация прошла успешно. Теперь войдите.</p>
 
-    <!-- Spring Security сам перенаправляет на /login?error при неверных данных -->
     <p class="form-error" th:if="${param.error}">Неверный email или пароль.</p>
 
-    <!-- th:action сам добавляет скрытое поле с CSRF-токеном.
-         Поля обязаны называться username и password. -->
     <form class="auth" th:action="@{/login}" method="post">
         <label for="username">Email</label>
         <input id="username" type="email" name="username" autocomplete="username" required autofocus>

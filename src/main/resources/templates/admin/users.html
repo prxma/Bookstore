@@ -14,7 +14,6 @@
 <main class="wrap">
     <h1>Пользователи <span class="muted" th:text="'(' + ${usersPage.totalElements} + ')'">(0)</span></h1>
 
-    <!-- Сообщения после действий (flash-атрибуты из контроллера) -->
     <p class="flash" th:if="${message}" th:text="${message}">Готово</p>
     <p class="flash err" th:if="${error}" th:text="${error}">Ошибка</p>
 
@@ -37,14 +36,12 @@
                 </td>
                 <td th:text="${#temporals.format(u.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2026 12:00</td>
                 <td>
-                    <!-- Не админ: можно сделать админом -->
                     <form class="inline" th:if="${!u.admin}" method="post"
                           th:action="@{/admin/users/{id}/make-admin(id=${u.userId})}">
                         <input type="hidden" name="page" th:value="${usersPage.number}">
                         <button type="submit" class="btn-small">Сделать админом</button>
                     </form>
 
-                    <!-- Админ, но не вы: можно снять права -->
                     <form class="inline" th:if="${u.admin and !#strings.equalsIgnoreCase(u.email, currentEmail)}" method="post"
                           th:action="@{/admin/users/{id}/remove-admin(id=${u.userId})}">
                         <input type="hidden" name="page" th:value="${usersPage.number}">
@@ -52,7 +49,6 @@
                                 onclick="return confirm('Снять права администратора?')">Снять права</button>
                     </form>
 
-                    <!-- Это вы -->
                     <span class="muted" th:if="${u.admin and #strings.equalsIgnoreCase(u.email, currentEmail)}">это вы</span>
                 </td>
             </tr>
@@ -60,7 +56,6 @@
         </table>
     </div>
 
-    <!-- Переключение страниц -->
     <nav class="pager" th:if="${usersPage.totalPages > 1}">
         <a th:if="${usersPage.hasPrevious()}" th:href="@{/admin/users(page=${usersPage.number - 1})}">Назад</a>
         <span>Страница <span th:text="${usersPage.number + 1}">1</span>

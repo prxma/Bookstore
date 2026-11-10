@@ -2,15 +2,14 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!-- Шапка сайта. Подключается так: <header th:replace="~{fragments :: header}"></header> -->
 <header class="top" th:fragment="header">
     <div class="in">
         <a class="brand" th:href="@{/books}">Bookstore</a>
         <div class="who">
-            <!-- Только для админа -->
             <a th:if="${isAdmin}" th:href="@{/admin}">Админка</a>
 
             <th:block th:if="${currentEmail != null}">
+                <a th:href="@{/purchases}">Мои покупки</a>
                 <span th:text="${currentEmail}">user@mail</span>
                 <form class="inline" th:action="@{/logout}" method="post">
                     <button type="submit" class="link">Выйти</button>
@@ -25,12 +24,12 @@
     </div>
 </header>
 
-<!-- Меню админки. active подсвечивает текущий раздел -->
 <nav class="adminnav" th:fragment="adminNav(active)">
     <div class="in">
         <a th:href="@{/admin}" th:classappend="${active == 'dashboard'} ? 'on'">Сводка</a>
         <a th:href="@{/admin/users}" th:classappend="${active == 'users'} ? 'on'">Пользователи</a>
-        <!-- Позже: Покупки, Статистика -->
+        <a th:href="@{/admin/purchases}" th:classappend="${active == 'purchases'} ? 'on'">Покупки</a>
+        <a th:href="@{/admin/stats}" th:classappend="${active == 'stats'} ? 'on'">Статистика</a>
     </div>
 </nav>
 

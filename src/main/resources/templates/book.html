@@ -11,31 +11,35 @@
 <header th:replace="~{fragments :: header}"></header>
 
 <main class="wrap">
+    <p class="flash" th:if="${message}" th:text="${message}">Готово</p>
+    <p class="flash err" th:if="${error}" th:text="${error}">Ошибка</p>
     <a class="back" th:href="@{/books}">Все книги</a>
 
     <div class="detail">
 
-        <!-- Большая обложка слева -->
         <div class="cover" th:style="'--h:' + ${(book.id * 47) % 360}" aria-hidden="true">
             <span class="ca" th:text="${book.author}">Автор</span>
             <span class="ct" th:text="${book.title}">Название</span>
         </div>
 
-        <!-- Информация справа -->
         <div>
             <h1 th:text="${book.title}">Название книги</h1>
             <p class="byline" th:text="${book.author}">Автор</p>
 
-            <!-- Жанры -->
             <ul class="tags" th:if="${book.genres != null and !book.genres.isEmpty()}">
                 <li class="tag" th:each="g : ${book.genres}" th:text="${g.name}">Жанр</li>
             </ul>
 
             <div class="buy">
                 <p class="price"><span th:text="${#numbers.formatDecimal(book.price, 1, 2)}">0.00</span> BYN</p>
+
+                <form th:if="${currentEmail != null}" th:action="@{/books/{id}/buy(id=${book.id})}" method="post">
+                    <button type="submit" class="btn">Купить</button>
+                </form>
+
+                <a th:if="${currentEmail == null}" class="btn" th:href="@{/login}">Войти, чтобы купить</a>
             </div>
 
-            <!-- Характеристики. Строка показывается, только если значение есть -->
             <dl class="facts">
                 <th:block th:if="${book.year_of_publishing != null}">
                     <dt>Год издания</dt>
@@ -52,7 +56,6 @@
                     <dd th:text="${book.isbn}">978-0-00-000000-0</dd>
                 </th:block>
 
-                <!-- Обложки: в базе хранятся SOFT/HARD/SPECIAL, на странице показываем по-русски -->
                 <th:block th:if="${book.coverSet != null and !book.coverSet.isEmpty()}">
                     <dt>Обложка</dt>
                     <dd>
@@ -68,7 +71,6 @@
                 </th:block>
             </dl>
 
-            <!-- Описание -->
             <section class="about" th:if="${book.description != null and !book.description.isBlank()}">
                 <h2>О книге</h2>
                 <p th:text="${book.description}">Описание книги.</p>
@@ -76,11 +78,10 @@
         </div>
     </div>
 
-    <!-- Похожие книги. Блок появится, когда контроллер передаст список similar (этап 3) -->
     <section class="similar" th:if="${similar != null and !similar.isEmpty()}">
         <h2>Похожие книги</h2>
         <ul class="shelf">
-            <li class="item" th:each="b : ${similar}">
+            <li class="item" th:each="b, st : ${similar}" th:style="'--i:' + ${st.index}">
                 <a class="cover" th:href="@{/books/{id}(id=${b.id})}"
                    th:style="'--h:' + ${(b.id * 47) % 360}" tabindex="-1" aria-hidden="true">
                     <span class="ca" th:text="${b.author}">Автор</span>
