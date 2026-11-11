@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Доступ запрещён</title>
+    <title>Access denied</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: header}"></header>
 <main class="wrap">
-    <h1>Доступ запрещён</h1>
-    <p class="muted">У вашей учётной записи нет прав для этой страницы.</p>
-    <p><a th:href="@{/books}">Вернуться в каталог</a></p>
+    <h1>Access denied</h1>
+    <p class="muted">Your account does not have permission to view this page.</p>
+    <p><a th:href="@{/books}">Back to the catalog</a></p>
 </main>
 </body>
 </html>

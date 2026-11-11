@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Покупки — Bookstore</title>
+    <title>Purchases — Bookstore</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,32 +12,32 @@
 <nav th:replace="~{fragments :: adminNav('purchases')}"></nav>
 
 <main class="wrap">
-    <h1>Покупки <span class="muted" th:text="'(' + ${purchasesPage.totalElements} + ')'">(0)</span></h1>
+    <h1>Purchases <span class="muted" th:text="'(' + ${purchasesPage.totalElements} + ')'">(0)</span></h1>
 
     <div class="table-wrap">
         <table class="table">
             <thead>
-            <tr><th>Дата</th><th>Покупатель</th><th>Книга</th><th>Цена</th></tr>
+            <tr><th>Date</th><th>Buyer</th><th>Book</th><th>Price</th></tr>
             </thead>
             <tbody>
             <tr th:each="p : ${purchasesPage.content}">
-                <td th:text="${#temporals.format(p.purchasedAt, 'dd.MM.yyyy HH:mm')}">01.01.2026 12:00</td>
+                <td th:text="${#temporals.format(p.purchasedAt, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</td>
                 <td>
-                    <span th:text="${p.user.name + ' ' + p.user.surname}">Имя Фамилия</span>
+                    <span th:text="${p.user.name + ' ' + p.user.surname}">First Last</span>
                     <span class="muted small" th:text="${p.user.email}">mail</span>
                 </td>
-                <td><a th:href="@{/books/{id}(id=${p.book.id})}" th:text="${p.book.title}">Книга</a></td>
-                <td><span th:text="${#numbers.formatDecimal(p.price, 1, 2)}">0.00</span> BYN</td>
+                <td><a th:href="@{/books/{id}(id=${p.book.id})}" th:text="${p.book.title}">Title</a></td>
+                <td><span th:text="${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')}">0.00</span> BYN</td>
             </tr>
             </tbody>
         </table>
     </div>
 
     <nav class="pager" th:if="${purchasesPage.totalPages > 1}">
-        <a th:if="${purchasesPage.hasPrevious()}" th:href="@{/admin/purchases(page=${purchasesPage.number - 1})}">Назад</a>
-        <span>Страница <span th:text="${purchasesPage.number + 1}">1</span>
-              из <span th:text="${purchasesPage.totalPages}">1</span></span>
-        <a th:if="${purchasesPage.hasNext()}" th:href="@{/admin/purchases(page=${purchasesPage.number + 1})}">Вперёд</a>
+        <a th:if="${purchasesPage.hasPrevious()}" th:href="@{/admin/purchases(page=${purchasesPage.number - 1})}">Previous</a>
+        <span>Page <span th:text="${purchasesPage.number + 1}">1</span>
+              of <span th:text="${purchasesPage.totalPages}">1</span></span>
+        <a th:if="${purchasesPage.hasNext()}" th:href="@{/admin/purchases(page=${purchasesPage.number + 1})}">Next</a>
     </nav>
 </main>
 

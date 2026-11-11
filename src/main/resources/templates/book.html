@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${book.title} + ' — Bookstore'">Книга</title>
+    <title th:text="${book.title} + ' — Bookstore'">Book</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -11,43 +11,49 @@
 <header th:replace="~{fragments :: header}"></header>
 
 <main class="wrap">
-    <p class="flash" th:if="${message}" th:text="${message}">Готово</p>
-    <p class="flash err" th:if="${error}" th:text="${error}">Ошибка</p>
-    <a class="back" th:href="@{/books}">Все книги</a>
+    <a class="back" th:href="@{/books}">All books</a>
+
+    <p class="flash" th:if="${message}" th:text="${message}">Done</p>
+    <p class="flash err" th:if="${error}" th:text="${error}">Error</p>
 
     <div class="detail">
 
+        <!-- Big cover on the left -->
         <div class="cover" th:style="'--h:' + ${(book.id * 47) % 360}" aria-hidden="true">
-            <span class="ca" th:text="${book.author}">Автор</span>
-            <span class="ct" th:text="${book.title}">Название</span>
+            <span class="ca" th:text="${book.author}">Author</span>
+            <span class="ct" th:text="${book.title}">Title</span>
         </div>
 
+        <!-- Details on the right -->
         <div>
-            <h1 th:text="${book.title}">Название книги</h1>
-            <p class="byline" th:text="${book.author}">Автор</p>
+            <h1 th:text="${book.title}">Book title</h1>
+            <p class="byline" th:text="${book.author}">Author</p>
 
             <ul class="tags" th:if="${book.genres != null and !book.genres.isEmpty()}">
-                <li class="tag" th:each="g : ${book.genres}" th:text="${g.name}">Жанр</li>
+                <li class="tag" th:each="g : ${book.genres}" th:text="${g.name}">Genre</li>
             </ul>
 
             <div class="buy">
-                <p class="price"><span th:text="${#numbers.formatDecimal(book.price, 1, 2)}">0.00</span> BYN</p>
+                <p class="price"><span th:text="${#numbers.formatDecimal(book.price, 1, 'COMMA', 2, 'POINT')}">0.00</span> BYN</p>
 
+                <!-- Logged-in users see the Buy button -->
                 <form th:if="${currentEmail != null}" th:action="@{/books/{id}/buy(id=${book.id})}" method="post">
-                    <button type="submit" class="btn">Купить</button>
+                    <button type="submit" class="btn">Buy</button>
                 </form>
 
-                <a th:if="${currentEmail == null}" class="btn" th:href="@{/login}">Войти, чтобы купить</a>
+                <!-- Guests are asked to log in -->
+                <a th:if="${currentEmail == null}" class="btn" th:href="@{/login}">Log in to buy</a>
             </div>
 
+            <!-- Facts. A row is shown only when the value exists -->
             <dl class="facts">
                 <th:block th:if="${book.year_of_publishing != null}">
-                    <dt>Год издания</dt>
+                    <dt>Year</dt>
                     <dd th:text="${book.year_of_publishing}">1949</dd>
                 </th:block>
 
                 <th:block th:if="${book.pages != null}">
-                    <dt>Страниц</dt>
+                    <dt>Pages</dt>
                     <dd th:text="${book.pages}">320</dd>
                 </th:block>
 
@@ -56,15 +62,16 @@
                     <dd th:text="${book.isbn}">978-0-00-000000-0</dd>
                 </th:block>
 
+                <!-- The database stores SOFT / HARD / SPECIAL, the page shows readable names -->
                 <th:block th:if="${book.coverSet != null and !book.coverSet.isEmpty()}">
-                    <dt>Обложка</dt>
+                    <dt>Cover</dt>
                     <dd>
                         <ul class="tags">
                             <li class="tag" th:each="c : ${book.coverSet}" th:switch="${c.name?.name()}">
-                                <span th:case="'HARD'">Твёрдая</span>
-                                <span th:case="'SOFT'">Мягкая</span>
-                                <span th:case="'SPECIAL'">Коллекционная</span>
-                                <span th:case="*" th:text="${c.name}">Другая</span>
+                                <span th:case="'HARD'">Hardcover</span>
+                                <span th:case="'SOFT'">Softcover</span>
+                                <span th:case="'SPECIAL'">Collector edition</span>
+                                <span th:case="*" th:text="${c.name}">Other</span>
                             </li>
                         </ul>
                     </dd>
@@ -72,25 +79,26 @@
             </dl>
 
             <section class="about" th:if="${book.description != null and !book.description.isBlank()}">
-                <h2>О книге</h2>
-                <p th:text="${book.description}">Описание книги.</p>
+                <h2>About the book</h2>
+                <p th:text="${book.description}">Book description.</p>
             </section>
         </div>
     </div>
 
+    <!-- Similar books: shown when the controller passes the "similar" list -->
     <section class="similar" th:if="${similar != null and !similar.isEmpty()}">
-        <h2>Похожие книги</h2>
+        <h2>Similar books</h2>
         <ul class="shelf">
             <li class="item" th:each="b, st : ${similar}" th:style="'--i:' + ${st.index}">
                 <a class="cover" th:href="@{/books/{id}(id=${b.id})}"
                    th:style="'--h:' + ${(b.id * 47) % 360}" tabindex="-1" aria-hidden="true">
-                    <span class="ca" th:text="${b.author}">Автор</span>
-                    <span class="ct" th:text="${b.title}">Название</span>
+                    <span class="ca" th:text="${b.author}">Author</span>
+                    <span class="ct" th:text="${b.title}">Title</span>
                 </a>
                 <div class="meta">
-                    <h2><a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">Название</a></h2>
-                    <p class="author" th:text="${b.author}">Автор</p>
-                    <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 2)}">0.00</span> BYN</p>
+                    <h2><a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">Title</a></h2>
+                    <p class="author" th:text="${b.author}">Author</p>
+                    <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 'COMMA', 2, 'POINT')}">0.00</span> BYN</p>
                 </div>
             </li>
         </ul>

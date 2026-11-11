@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Регистрация</title>
+    <title>Sign up — Bookstore</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -11,35 +11,36 @@
 <header th:replace="~{fragments :: header}"></header>
 
 <main class="wrap">
-    <h1>Регистрация</h1>
+    <h1>Sign up</h1>
 
+    <!-- novalidate turns off the browser checks so the server messages are shown -->
     <form class="auth" th:action="@{/register}" th:object="${form}" method="post" novalidate>
 
-        <label for="name">Имя</label>
+        <label for="name">First name</label>
         <input type="text" th:field="*{name}" autocomplete="given-name">
-        <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Ошибка</p>
+        <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</p>
 
-        <label for="surname">Фамилия</label>
+        <label for="surname">Last name</label>
         <input type="text" th:field="*{surname}" autocomplete="family-name">
-        <p class="field-error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Ошибка</p>
+        <p class="field-error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Error</p>
 
         <label for="email">Email</label>
         <input type="email" th:field="*{email}" autocomplete="email">
-        <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Ошибка</p>
+        <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</p>
 
-        <label for="password">Пароль</label>
+        <label for="password">Password</label>
         <input type="password" th:field="*{password}" autocomplete="new-password">
-        <p class="hint">Не меньше 8 символов</p>
-        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Ошибка</p>
+        <p class="hint">At least 8 characters</p>
+        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</p>
 
-        <label for="confirmPassword">Повторите пароль</label>
+        <label for="confirmPassword">Repeat password</label>
         <input type="password" th:field="*{confirmPassword}" autocomplete="new-password">
-        <p class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Ошибка</p>
+        <p class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Error</p>
 
-        <button type="submit" class="btn">Зарегистрироваться</button>
+        <button type="submit" class="btn">Create account</button>
     </form>
 
-    <p class="muted">Уже есть аккаунт? <a th:href="@{/login}">Войти</a></p>
+    <p class="muted">Already have an account? <a th:href="@{/login}">Log in</a></p>
 </main>
 
 </body>

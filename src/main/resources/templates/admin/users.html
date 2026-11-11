@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Пользователи — Bookstore</title>
+    <title>Users — Bookstore</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,44 +12,48 @@
 <nav th:replace="~{fragments :: adminNav('users')}"></nav>
 
 <main class="wrap">
-    <h1>Пользователи <span class="muted" th:text="'(' + ${usersPage.totalElements} + ')'">(0)</span></h1>
+    <h1>Users <span class="muted" th:text="'(' + ${usersPage.totalElements} + ')'">(0)</span></h1>
 
-    <p class="flash" th:if="${message}" th:text="${message}">Готово</p>
-    <p class="flash err" th:if="${error}" th:text="${error}">Ошибка</p>
+    <!-- Messages after actions (flash attributes from the controller) -->
+    <p class="flash" th:if="${message}" th:text="${message}">Done</p>
+    <p class="flash err" th:if="${error}" th:text="${error}">Error</p>
 
     <div class="table-wrap">
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th><th>Имя</th><th>Email</th><th>Роли</th><th>Зарегистрирован</th><th>Действия</th>
+                <th>ID</th><th>Name</th><th>Email</th><th>Roles</th><th>Registered</th><th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="u : ${usersPage.content}">
                 <td th:text="${u.userId}">1</td>
-                <td th:text="${u.name + ' ' + u.surname}">Имя Фамилия</td>
+                <td th:text="${u.name + ' ' + u.surname}">First Last</td>
                 <td th:text="${u.email}">mail@example.com</td>
                 <td>
                     <span class="badge" th:each="r : ${u.roles}"
                           th:classappend="${r.name.name() == 'ADMIN'} ? 'admin'"
                           th:text="${r.name}">USER</span>
                 </td>
-                <td th:text="${#temporals.format(u.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2026 12:00</td>
+                <td th:text="${#temporals.format(u.createdAt, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</td>
                 <td>
+                    <!-- Not an admin: can be promoted -->
                     <form class="inline" th:if="${!u.admin}" method="post"
-                          th:action="@{/admin/users/{id}/make-admin(id=${u.userId})}">
+                          th:action="@{/admin/users/{id}/make-admin(id=${u.userId})}"
                         <input type="hidden" name="page" th:value="${usersPage.number}">
-                        <button type="submit" class="btn-small">Сделать админом</button>
+                        <button type="submit" class="btn-small">Make admin</button>
                     </form>
 
+                    <!-- An admin, but not you: rights can be removed -->
                     <form class="inline" th:if="${u.admin and !#strings.equalsIgnoreCase(u.email, currentEmail)}" method="post"
-                          th:action="@{/admin/users/{id}/remove-admin(id=${u.userId})}">
+                          th:action="@{/admin/users/{id}/remove-admin(id=${u.userId})}"
                         <input type="hidden" name="page" th:value="${usersPage.number}">
                         <button type="submit" class="btn-small"
-                                onclick="return confirm('Снять права администратора?')">Снять права</button>
+                                onclick="return confirm('Remove admin rights?')">Remove admin</button>
                     </form>
 
-                    <span class="muted" th:if="${u.admin and #strings.equalsIgnoreCase(u.email, currentEmail)}">это вы</span>
+                    <!-- This is you -->
+                    <span class="muted" th:if="${u.admin and #strings.equalsIgnoreCase(u.email, currentEmail)}">this is you</span>
                 </td>
             </tr>
             </tbody>
@@ -57,10 +61,10 @@
     </div>
 
     <nav class="pager" th:if="${usersPage.totalPages > 1}">
-        <a th:if="${usersPage.hasPrevious()}" th:href="@{/admin/users(page=${usersPage.number - 1})}">Назад</a>
-        <span>Страница <span th:text="${usersPage.number + 1}">1</span>
-              из <span th:text="${usersPage.totalPages}">1</span></span>
-        <a th:if="${usersPage.hasNext()}" th:href="@{/admin/users(page=${usersPage.number + 1})}">Вперёд</a>
+        <a th:if="${usersPage.hasPrevious()}" th:href="@{/admin/users(page=${usersPage.number - 1})}">Previous</a>
+        <span>Page <span th:text="${usersPage.number + 1}">1</span>
+              of <span th:text="${usersPage.totalPages}">1</span></span>
+        <a th:if="${usersPage.hasNext()}" th:href="@{/admin/users(page=${usersPage.number + 1})}">Next</a>
     </nav>
 </main>
 

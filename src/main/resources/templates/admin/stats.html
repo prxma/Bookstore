@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Статистика — Bookstore</title>
+    <title>Statistics — Bookstore</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script th:src="@{/js/app.js}" defer></script>
 </head>
@@ -13,100 +13,102 @@
 <nav th:replace="~{fragments :: adminNav('stats')}"></nav>
 
 <main class="wrap">
-    <h1>Статистика покупок</h1>
+    <h1>Purchase statistics</h1>
 
+    <!-- data-count is read by app.js, which smoothly counts the number up from zero -->
     <ul class="stats">
         <li>
             <span class="num" th:data-count="${r.overview.purchases}" th:text="${r.overview.purchases}">0</span>
-            <span class="lbl">Покупок</span>
+            <span class="lbl">Purchases</span>
         </li>
         <li>
             <span class="num" th:data-count="${r.overview.buyers}" th:text="${r.overview.buyers}">0</span>
-            <span class="lbl">Покупателей</span>
+            <span class="lbl">Buyers</span>
         </li>
         <li>
             <span class="num" data-decimals="2" th:data-count="${r.overview.revenue}"
-                  th:text="${#numbers.formatDecimal(r.overview.revenue, 1, 'WHITESPACE', 2, 'COMMA')}">0</span>
-            <span class="lbl">Выручка, BYN</span>
+                  th:text="${#numbers.formatDecimal(r.overview.revenue, 1, 'COMMA', 2, 'POINT')}">0</span>
+            <span class="lbl">Revenue, BYN</span>
         </li>
         <li>
             <span class="num" data-decimals="2" th:data-count="${r.overview.revenue30}"
-                  th:text="${#numbers.formatDecimal(r.overview.revenue30, 1, 'WHITESPACE', 2, 'COMMA')}">0</span>
-            <span class="lbl">За 30 дней, BYN</span>
+                  th:text="${#numbers.formatDecimal(r.overview.revenue30, 1, 'COMMA', 2, 'POINT')}">0</span>
+            <span class="lbl">Last 30 days, BYN</span>
         </li>
         <li>
             <span class="num" data-decimals="2" th:data-count="${r.overview.average}"
-                  th:text="${#numbers.formatDecimal(r.overview.average, 1, 'WHITESPACE', 2, 'COMMA')}">0</span>
-            <span class="lbl">Средняя покупка, BYN</span>
+                  th:text="${#numbers.formatDecimal(r.overview.average, 1, 'COMMA', 2, 'POINT')}">0</span>
+            <span class="lbl">Average purchase, BYN</span>
         </li>
     </ul>
 
+    <!-- Daily chart: one bar = one day. Bar height comes from the --h variable (percent) -->
     <section class="panel">
-        <h2>Выручка по дням <span class="muted">за последние 30 дней</span></h2>
-        <div class="cols" role="img" aria-label="График выручки по дням">
+        <h2>Revenue by day <span class="muted">last 30 days</span></h2>
+        <div class="cols" role="img" aria-label="Chart of revenue by day">
             <div class="col" th:each="d, st : ${r.days}"
                  th:style="'--h:' + ${d.pct} + ';--i:' + ${st.index}"
-                 th:title="${#temporals.format(d.date, 'dd.MM')} + ': ' + ${d.count} + ' шт., ' + ${#numbers.formatDecimal(d.revenue, 1, 2)} + ' BYN'">
+                 th:title="${#temporals.format(d.date, 'MM-dd')} + ': ' + ${d.count} + ' items, ' + ${#numbers.formatDecimal(d.revenue, 1, 'COMMA', 2, 'POINT')} + ' BYN'">
                 <span class="fill"></span>
             </div>
         </div>
         <div class="axis">
-            <span th:text="${#temporals.format(r.days[0].date, 'dd.MM')}">01.10</span>
-            <span th:text="${#temporals.format(r.days[r.days.size() - 1].date, 'dd.MM')}">30.10</span>
+            <span th:text="${#temporals.format(r.days[0].date, 'MM-dd')}">10-01</span>
+            <span th:text="${#temporals.format(r.days[r.days.size() - 1].date, 'MM-dd')}">10-30</span>
         </div>
     </section>
 
     <div class="grid2">
         <section class="panel">
-            <h2>Топ книг</h2>
+            <h2>Top books</h2>
             <ol class="bars">
                 <li th:each="b, st : ${r.topBooks}" th:style="'--w:' + ${b.pct} + ';--i:' + ${st.index}">
-                    <span class="lbl" th:text="${b.label}">Название</span>
-                    <span class="val"><b th:text="${b.count}">0</b> шт., <span th:text="${#numbers.formatDecimal(b.revenue, 1, 2)}">0</span> BYN</span>
+                    <span class="lbl" th:text="${b.label}">Title</span>
+                    <span class="val"><b th:text="${b.count}">0</b> sold, <span th:text="${#numbers.formatDecimal(b.revenue, 1, 'COMMA', 2, 'POINT')}">0</span> BYN</span>
                     <span class="track"><span class="fill"></span></span>
                 </li>
             </ol>
         </section>
 
         <section class="panel">
-            <h2>Продажи по жанрам</h2>
+            <h2>Sales by genre</h2>
             <ol class="bars">
                 <li th:each="b, st : ${r.genres}" th:style="'--w:' + ${b.pct} + ';--i:' + ${st.index}">
-                    <span class="lbl" th:text="${b.label}">Жанр</span>
-                    <span class="val"><b th:text="${b.count}">0</b> шт., <span th:text="${#numbers.formatDecimal(b.revenue, 1, 2)}">0</span> BYN</span>
+                    <span class="lbl" th:text="${b.label}">Genre</span>
+                    <span class="val"><b th:text="${b.count}">0</b> sold, <span th:text="${#numbers.formatDecimal(b.revenue, 1, 'COMMA', 2, 'POINT')}">0</span> BYN</span>
                     <span class="track"><span class="fill"></span></span>
                 </li>
             </ol>
-            <p class="muted small">Книга с двумя жанрами учитывается в обоих.</p>
+            <p class="muted small">A book with two genres is counted in both.</p>
         </section>
     </div>
 
     <div class="grid2">
         <section class="panel">
-            <h2>Лучшие покупатели</h2>
+            <h2>Top buyers</h2>
             <ol class="bars">
                 <li th:each="b, st : ${r.buyers}" th:style="'--w:' + ${b.pct} + ';--i:' + ${st.index}">
                     <span class="lbl" th:text="${b.label}">mail@example.com</span>
-                    <span class="val"><b th:text="${b.count}">0</b> шт., <span th:text="${#numbers.formatDecimal(b.revenue, 1, 2)}">0</span> BYN</span>
+                    <span class="val"><b th:text="${b.count}">0</b> bought, <span th:text="${#numbers.formatDecimal(b.revenue, 1, 'COMMA', 2, 'POINT')}">0</span> BYN</span>
                     <span class="track"><span class="fill"></span></span>
                 </li>
             </ol>
         </section>
 
         <section class="panel">
-            <h2>Последние покупки</h2>
+            <h2>Latest purchases</h2>
             <div class="table-wrap">
                 <table class="table">
                     <tbody>
                     <tr th:each="p : ${r.latest}">
-                        <td th:text="${#temporals.format(p.purchasedAt, 'dd.MM HH:mm')}">01.01 12:00</td>
+                        <td th:text="${#temporals.format(p.purchasedAt, 'MM-dd HH:mm')}">01-01 12:00</td>
                         <td th:text="${p.user.email}">mail</td>
-                        <td th:text="${p.book.title}">Книга</td>
+                        <td th:text="${p.book.title}">Title</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <p class="small"><a th:href="@{/admin/purchases}">Все покупки</a></p>
+            <p class="small"><a th:href="@{/admin/purchases}">All purchases</a></p>
         </section>
     </div>
 </main>

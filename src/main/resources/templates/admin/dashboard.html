@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Админ</title>
+    <title>Admin — Bookstore</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,32 +12,32 @@
 <nav th:replace="~{fragments :: adminNav('dashboard')}"></nav>
 
 <main class="wrap">
-    <h1>Панель администратора</h1>
+    <h1>Admin panel</h1>
 
     <ul class="stats">
-        <li><span class="num" th:text="${stats.users}">0</span><span class="lbl">Пользователей</span></li>
-        <li><span class="num" th:text="${stats.usersPerWeek}">0</span><span class="lbl">Новых за 7 дней</span></li>
-        <li><span class="num" th:text="${stats.admins}">0</span><span class="lbl">Администраторов</span></li>
-        <li><span class="num" th:text="${stats.books}">0</span><span class="lbl">Книг в каталоге</span></li>
+        <li><span class="num" th:text="${stats.users}">0</span><span class="lbl">Users</span></li>
+        <li><span class="num" th:text="${stats.usersPerWeek}">0</span><span class="lbl">New in 7 days</span></li>
+        <li><span class="num" th:text="${stats.admins}">0</span><span class="lbl">Admins</span></li>
+        <li><span class="num" th:text="${stats.books}">0</span><span class="lbl">Books in catalog</span></li>
     </ul>
 
-    <h2>Последние регистрации</h2>
+    <h2>Latest registrations</h2>
     <div class="table-wrap">
         <table class="table">
             <thead>
-            <tr><th>Имя</th><th>Email</th><th>Зарегистрирован</th></tr>
+            <tr><th>Name</th><th>Email</th><th>Registered</th></tr>
             </thead>
             <tbody>
             <tr th:each="u : ${latest}">
-                <td th:text="${u.name + ' ' + u.surname}">Имя Фамилия</td>
+                <td th:text="${u.name + ' ' + u.surname}">First Last</td>
                 <td th:text="${u.email}">mail@example.com</td>
-                <td th:text="${#temporals.format(u.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2026 12:00</td>
+                <td th:text="${#temporals.format(u.createdAt, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <p><a th:href="@{/admin/users}">Все пользователи</a></p>
+    <p><a th:href="@{/admin/users}">All users</a></p>
 </main>
 
 </body>

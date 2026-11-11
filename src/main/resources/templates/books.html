@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Каталог книг</title>
+    <title>Book catalog</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script th:src="@{/js/catalog.js}" defer></script>
 </head>
@@ -12,48 +12,50 @@
 <header th:replace="~{fragments :: header}"></header>
 
 <main class="wrap">
-    <h1>Каталог книг</h1>
+    <h1>Book catalog</h1>
 
-    <p class="flash" th:if="${message}" th:text="${message}">Готово</p>
-    <p class="flash err" th:if="${error}" th:text="${error}">Ошибка</p>
+    <p class="flash" th:if="${message}" th:text="${message}">Done</p>
+    <p class="flash err" th:if="${error}" th:text="${error}">Error</p>
 
     <form class="search" th:action="@{/books}" method="get">
-        <input type="search" name="q" th:value="${q}" placeholder="Название или автор" aria-label="Поиск по названию или автору">
-        <button type="submit">Найти</button>
-        <a class="reset" th:if="${q != null and !q.isBlank()}" th:href="@{/books}">Сбросить поиск</a>
+        <input type="search" name="q" th:value="${q}" placeholder="Title or author" aria-label="Search by title or author">
+        <button type="submit">Search</button>
+        <a class="reset" th:if="${q != null and !q.isBlank()}" th:href="@{/books}">Clear search</a>
     </form>
 
     <p class="muted" th:if="${q != null and !q.isBlank()}">
-        По запросу «<span th:text="${q}">слово</span>» найдено: <span th:text="${#lists.size(books)}">0</span>
+        Results for “<span th:text="${q}">word</span>”: <span th:text="${#lists.size(books)}">0</span>
     </p>
 
     <p class="empty" th:if="${#lists.isEmpty(books)}">
-        Ничего не найдено. Попробуйте другое слово или сбросьте поиск.
+        Nothing found. Try another word or clear the search.
     </p>
 
+    <!-- id="orderForm" lets the floating cart button below submit this form -->
     <form id="orderForm" th:action="@{/purchases/buy-many}" method="post" th:unless="${#lists.isEmpty(books)}">
         <ul class="shelf">
             <li class="item" th:each="b, st : ${books}" th:style="'--i:' + ${st.index}">
 
                 <a class="cover" th:href="@{/books/{id}(id=${b.id})}"
                    th:style="'--h:' + ${(b.id * 47) % 360}" tabindex="-1" aria-hidden="true">
-                    <span class="ca" th:text="${b.author}">Автор</span>
-                    <span class="ct" th:text="${b.title}">Название</span>
+                    <span class="ca" th:text="${b.author}">Author</span>
+                    <span class="ct" th:text="${b.title}">Title</span>
                 </a>
 
                 <div class="meta">
-                    <h2><a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">Название</a></h2>
+                    <h2><a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">Title</a></h2>
                     <p class="author">
-                        <span th:text="${b.author}">Автор</span><span th:if="${b.year_of_publishing != null}">, <span th:text="${b.year_of_publishing}">1949</span></span>
+                        <span th:text="${b.author}">Author</span><span th:if="${b.year_of_publishing != null}">, <span th:text="${b.year_of_publishing}">1949</span></span>
                     </p>
 
                     <ul class="tags" th:if="${b.genres != null and !b.genres.isEmpty()}">
-                        <li class="tag" th:each="g : ${b.genres}" th:text="${g.name}">Жанр</li>
+                        <li class="tag" th:each="g : ${b.genres}" th:text="${g.name}">Genre</li>
                     </ul>
 
-                    <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 2)}">0.00</span> BYN</p>
+                    <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 'COMMA', 2, 'POINT')}">0.00</span> BYN</p>
                 </div>
 
+                <!-- "Add to order" button. Inside is a hidden checkbox, and the form submits it -->
                 <label class="pick" th:if="${currentEmail != null}">
                     <input type="checkbox" name="bookIds" th:value="${b.id}">
                     <span class="pick-btn">
@@ -62,14 +64,14 @@
                                  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M12 5v14M5 12h14"/>
                             </svg>
-                            В заказ
+                            Add to order
                         </span>
                         <span class="on">
                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
                                  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M5 12.5l4.5 4.5L19 7.5"/>
                             </svg>
-                            В заказе
+                            In order
                         </span>
                     </span>
                 </label>
@@ -78,9 +80,10 @@
     </form>
 </main>
 
+<!-- Floating cart. It sits OUTSIDE main and is linked to the form by form="orderForm" -->
 <button type="submit" form="orderForm" class="cart" id="cartBtn"
         th:if="${currentEmail != null and !#lists.isEmpty(books)}"
-        title="Купить выбранные" aria-label="Купить выбранные книги">
+        title="Buy selected" aria-label="Buy selected books">
     <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor"
          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="9" cy="20" r="1.4"/>
