@@ -13,7 +13,6 @@
 <main class="wrap">
     <h1>Sign up</h1>
 
-    <!-- novalidate turns off the browser checks so the server messages are shown -->
     <form class="auth" th:action="@{/register}" th:object="${form}" method="post" novalidate>
 
         <label for="name">First name</label>

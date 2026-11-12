@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# SSH keys
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Environment variables
+.env
+.env.*
+
+# Secrets
+secrets/

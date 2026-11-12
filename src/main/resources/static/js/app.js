@@ -1,5 +1,3 @@
-// Smoothly counts numbers up from zero to the value in data-count.
-// Without the script the number is still visible: it is already written in the text.
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -19,7 +17,7 @@
     function step(ts) {
       if (start === null) start = ts;
       var t = Math.min((ts - start) / duration, 1);
-      var eased = 1 - Math.pow(1 - t, 3);          // fast start, soft stop
+      var eased = 1 - Math.pow(1 - t, 3);
       el.textContent = fmt.format(target * eased);
       if (t < 1) requestAnimationFrame(step);
     }

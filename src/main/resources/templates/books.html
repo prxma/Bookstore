@@ -31,7 +31,6 @@
         Nothing found. Try another word or clear the search.
     </p>
 
-    <!-- id="orderForm" lets the floating cart button below submit this form -->
     <form id="orderForm" th:action="@{/purchases/buy-many}" method="post" th:unless="${#lists.isEmpty(books)}">
         <ul class="shelf">
             <li class="item" th:each="b, st : ${books}" th:style="'--i:' + ${st.index}">
@@ -55,7 +54,6 @@
                     <p class="price"><span th:text="${#numbers.formatDecimal(b.price, 1, 'COMMA', 2, 'POINT')}">0.00</span> BYN</p>
                 </div>
 
-                <!-- "Add to order" button. Inside is a hidden checkbox, and the form submits it -->
                 <label class="pick" th:if="${currentEmail != null}">
                     <input type="checkbox" name="bookIds" th:value="${b.id}">
                     <span class="pick-btn">
@@ -80,7 +78,6 @@
     </form>
 </main>
 
-<!-- Floating cart. It sits OUTSIDE main and is linked to the form by form="orderForm" -->
 <button type="submit" form="orderForm" class="cart" id="cartBtn"
         th:if="${currentEmail != null and !#lists.isEmpty(books)}"
         title="Buy selected" aria-label="Buy selected books">

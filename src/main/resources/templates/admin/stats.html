@@ -15,7 +15,6 @@
 <main class="wrap">
     <h1>Purchase statistics</h1>
 
-    <!-- data-count is read by app.js, which smoothly counts the number up from zero -->
     <ul class="stats">
         <li>
             <span class="num" th:data-count="${r.overview.purchases}" th:text="${r.overview.purchases}">0</span>
@@ -42,7 +41,6 @@
         </li>
     </ul>
 
-    <!-- Daily chart: one bar = one day. Bar height comes from the --h variable (percent) -->
     <section class="panel">
         <h2>Revenue by day <span class="muted">last 30 days</span></h2>
         <div class="cols" role="img" aria-label="Chart of revenue by day">

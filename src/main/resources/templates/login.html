@@ -13,13 +13,10 @@
 <main class="wrap">
     <h1>Log in</h1>
 
-    <!-- Shown after registration (address /login?registered) -->
     <p class="form-ok" th:if="${param.registered}">Registration successful. Please log in.</p>
 
-    <!-- Spring Security redirects to /login?error when the email or password is wrong -->
     <p class="form-error" th:if="${param.error}">Wrong email or password.</p>
 
-    <!-- th:action adds the hidden CSRF token. The fields must be named username and password -->
     <form class="auth" th:action="@{/login}" method="post">
         <label for="username">Email</label>
         <input id="username" type="email" name="username" autocomplete="username" required autofocus>

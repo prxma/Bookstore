@@ -2,15 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!-- Site header. Include it with: <header th:replace="~{fragments :: header}"></header> -->
 <header class="top" th:fragment="header">
     <div class="in">
         <a class="brand" th:href="@{/books}">Bookstore</a>
         <div class="who">
-            <!-- Admins only -->
             <a th:if="${isAdmin}" th:href="@{/admin}">Admin</a>
 
-            <!-- Logged-in user -->
             <th:block th:if="${currentEmail != null}">
                 <a th:href="@{/purchases}">My purchases</a>
                 <span th:text="${currentEmail}">user@mail</span>
@@ -19,7 +16,6 @@
                 </form>
             </th:block>
 
-            <!-- Guest -->
             <th:block th:if="${currentEmail == null}">
                 <a th:href="@{/login}">Log in</a>
                 <a th:href="@{/register}">Sign up</a>
@@ -28,7 +24,6 @@
     </div>
 </header>
 
-<!-- Admin menu. "active" highlights the current section -->
 <nav class="adminnav" th:fragment="adminNav(active)">
     <div class="in">
         <a th:href="@{/admin}" th:classappend="${active == 'dashboard'} ? 'on'">Dashboard</a>
